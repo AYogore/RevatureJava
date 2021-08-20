@@ -69,55 +69,18 @@ public class Main {
 			System.out.println("\n" + "Items: " + "\n" + player.currentRoom.items[0].shortDescription);
 		}
 		
-			
-		
-		
-		/*System.out.println("North: " + player.currentRoom.exits[0].name);
-		System.out.println("South: " + player.currentRoom.exits[2].name);
-		System.out.println("West: " + player.currentRoom.exits[3].name);
-		*/
-		//print all exits
-		//Room[] exitArray = player.currentRoom.getExits();
-		
 	}
 
 	private static String[] collectInput(String command) {
-		//split command to command and fixture
-		//boolean l = false;
-		//String[] s;
-		//Scanner sca = new Scanner(System.in);
-		/*
-		while(l == false)
-		{
-			if(command.toCharArray().length <= 4)
-			{
-				System.out.println("Please enter a valid command(move x, use x, quit x:)");
-				s = collectInput(sca.nextLine());
-				System.out.println(".");
-			}
-			else
-				l = true;
-			
-		}*/
-		//valid statement loop
+		
 		String[] commandArray = command.toLowerCase().split(" ");
-		//sca.close();
 		return commandArray ;
 	}
 		
-	private static void parse(String[] command, Player player) {
+	private static void parse(String[] command, Player player) throws IllegalArgumentException {
 		//split with space
 		String action = command[0];
 		String item = command[1];
-		if(command[1] != null)
-		{
-			item = command[1];		
-		}
-		else
-		{
-			System.out.println("bleh");
-		}
-		//go command
 		
 		switch(action)
 		{
@@ -133,8 +96,12 @@ public class Main {
 				System.out.println(player.currentRoom.items[0].longDescription);
 				break;
 			case "quit":
+				System.out.println("Quit Game");
 				player.game = false;
 				break;
+				
+			default:
+				System.out.println("Please enter valid statement(move x, use x, game x): ";
 			
 				
 		}
