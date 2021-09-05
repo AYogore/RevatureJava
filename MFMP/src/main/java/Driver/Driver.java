@@ -3,7 +3,7 @@ import io.javalin.Javalin;
 public class Driver {
 
 	public static void main(String[] args) {
-		Javalin app = Javalin.create().start(7000);
+		Javalin app = Javalin.create().start(7001);
 		app.get("/", ctx -> ctx.result("Hello World"));
 		app.post("/send-data", ctx -> {
 			System.out.println(ctx.body());
