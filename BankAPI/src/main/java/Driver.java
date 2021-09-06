@@ -42,26 +42,49 @@ public class Driver {
 			});
 		app.get("/clients", clients -> {
 			clients.result(PrintCustomers());
+			//clients.result(CustomerDAO.)
+			
+			//String s = CustomerDAO.
 		});
 		app.get("/clients/:id", clients -> {
 			try {
 				int id = Integer.parseInt(clients.pathParam("id"));
 				Customer c = CustomerDAO.get(id);
 				clients.result(c.GetName());
-				
 			} catch (Exception e) {
 				clients.status(404);
+				clients.result("Client does not exist");
+				e.printStackTrace();
 			}
 			//PrintCustomer(clients.pathParam("id"));
 		});
 		app.post("/clients", clients -> {
-			
-			clients.html("creating clients");
+			//make new
+			clients.result("Made new client:" + clients.body());
 			clients.status(201);
-			//Customer newCustomer = new Customer("John", "Smith", 6);
-			//newCustomer.g
+			Customer c = new Customer();
+			c.SetName(clients.body());
+			System.out.println(c.GetName());
+			//parse body
+ 			CustomerDAO.save(c);
 			
-			//PreparedStatement createCustomer = con.prepareStatement(createC);
+		});
+		app.put("/clients/:id", ctx -> {
+			//UPDATE
+			try {
+				int id = Integer.parseInt(ctx.pathParam("id"));
+				Customer c = CustomerDAO.get(id);
+	 			String[] str = ctx.body().split("\n");
+
+				CustomerDAO.update(c, str);
+				//run update method
+				
+				ctx.result(c.GetName());
+			} catch (Exception e) {
+				ctx.status(404);
+				ctx.result("Client does not exist");
+				e.printStackTrace();
+			}
 		});
 			
 		
