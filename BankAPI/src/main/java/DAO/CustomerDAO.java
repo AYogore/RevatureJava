@@ -107,11 +107,11 @@ import Utils.ConnectionFactory;
 		 try {
 			String sql = "UPDATE customers SET name = (?), address_id = (?) WHERE customer_id=(?)";
 			PreparedStatement pstmt = connection.prepareStatement(sql);
-			pstmt.setString(1, params[0]);
+			pstmt.setString(1, params[0]); 
    		 	pstmt.setString(2, params[1]);
    		 	pstmt.setFloat(3, customer.GetCustomerId());
    		 	
-   		 	pstmt.execute();
+   		 	pstmt.executeQuery();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
