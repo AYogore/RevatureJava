@@ -2,33 +2,34 @@ package Models;
 
 public class Customer {
 
-	private String firstName;
-	private String lastName;
+	private String name;
 	
 	private float customerId;
 	
 	public Customer()
 	{}
 	
-	public Customer(String fn, String ln, float cid) {
-		this.firstName = fn;
-		this.lastName = ln;
+	public Customer(String n, float cid) {
+		this.name = n;
 		this.customerId = cid;
 	}
 	
 	public String GetName(){
-		return firstName + " " + lastName;
+		return name;
 	}
 	
 	public float GetCustomerId(){
 		return customerId;
 	}
 	
-	public void SetLastName(String ln){
-		this.lastName = ln;
+	
+	
+	public void SetName(String n) {
+		this.name = n;
 	}
 	
-	public void SetFirstName(String fn) {
-		this.firstName = fn;
+	
+	public void SetCustomerId(float f) {
+		this.customerId = f;
 	}
 }
