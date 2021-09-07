@@ -7,7 +7,7 @@ public interface Dao<T> {
 
 	T get(int id);
 	
-	List<T> getAll();
+	String getAll();
 	
 	void save(T t) throws SQLException;
 	

@@ -40,33 +40,33 @@ public class Driver {
 			throw new Exception("test");
 			});
 		//GET ALL CLIENTS
-		app.get("/clients", clients -> {
-			clients.result(PrintCustomers());
-			//clients.result(CustomerDAO.)
+		app.get("/clients", ctx -> {
+			//clients.result(PrintCustomers());
+			ctx.result(CustomerDAO.getAll());
 			
 			//String s = CustomerDAO.
 		});
 		//GET CLIENT OF ID
-		app.get("/clients/:id", clients -> {
+		app.get("/clients/:id", ctx -> {
 			try {
-				int id = Integer.parseInt(clients.pathParam("id"));
+				int id = Integer.parseInt(ctx.pathParam("id"));
 				Customer c = CustomerDAO.get(id);
-				clients.result(c.GetName());
+				ctx.result(c.GetName());
 			} catch (Exception e) {
-				clients.status(404);
-				clients.result("Client does not exist");
+				ctx.status(404);
+				ctx.result("Client does not exist");
 				e.printStackTrace();
 			}
 			//PrintCustomer(clients.pathParam("id"));
 		});
 		
 		//CREATE NEW CLIENT
-		app.post("/clients", clients -> {
+		app.post("/clients", ctx -> {
 			//make new
-			clients.result("Made new client:" + clients.body());
-			clients.status(201);
+			ctx.result("Made new client:" + ctx.body());
+			ctx.status(201);
 			Customer c = new Customer();
-			c.SetName(clients.body());
+			c.SetName(ctx.body());
 			System.out.println(c.GetName());
 			//parse body
  			CustomerDAO.save(c);
@@ -114,17 +114,26 @@ public class Driver {
 			try {
 				int id = Integer.parseInt(ctx.pathParam("id"));
 				Customer c = CustomerDAO.get(id);
-				
-				ctx.result("Made new ACCOUNT:" + ctx.body());
 				ctx.status(201);
 				
 				Account a = new Account(c.GetCustomerId());
 				System.out.println(c.GetName() + "has made a new account");
 				//CREATE ACCOUNT
 				AccountDAO.save(a);
-	 			//CustomerDAO.save(c);
-				
-				//ctx.result(c.GetName() + "has been deleted");
+			} catch (Exception e) {
+				ctx.status(404);
+				ctx.result("Cannot make account for error: Client does not exist");
+				e.printStackTrace();
+			}
+		});
+		
+		app.get("/clients/:id/accounts", ctx ->{
+			try {
+				int id = Integer.parseInt(ctx.pathParam("id"));
+				Customer c = CustomerDAO.get(id);
+				System.out.println("Showing all accounts of " + c.GetName());
+				//Print Accounts
+				ctx.result(AccountDAO.getAll());
 			} catch (Exception e) {
 				ctx.status(404);
 				ctx.result("Client does not exist");

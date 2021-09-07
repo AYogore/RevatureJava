@@ -46,15 +46,9 @@ import Utils.ConnectionFactory;
      }
 
      @Override
-     public List<Customer> getAll() {
-    	 //for each loop, return all names with id table
+     public String getAll() {
     	 
-         return customers;
-     }
-     public String PrintCustomers() {
- 		Connection con = ConnectionFactory.getConnection();//"jdbc:mariadb://database-1.ct4rayfqtdoi.us-east-2.rds.amazonaws.com:3306/innodb?user=admin&password=Csamoan75");
- 		//"jdbc:mariadb://<RDS ENDPOINT FROM AWS RDS SERVICE>:<port>/<DATABASE NAME>?user=<USER NAME>&password=<PASSWORD>"
- 		//notation for URI in getConnection method
+ 		Connection con = ConnectionFactory.getConnection();
  		String sql = "SELECT * FROM customers";
  		StringBuilder sb = new StringBuilder("==========Customers==========");
  		sb.append("\n    ID          Name       ");

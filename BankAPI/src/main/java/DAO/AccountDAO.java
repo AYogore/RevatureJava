@@ -2,12 +2,15 @@ package DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
 import Models.Account;
 import Models.Customer;
+import Utils.ConnectionFactory;
 
 public class AccountDAO implements Dao<Account>{
     private List<Account> accounts;
@@ -26,8 +29,33 @@ public class AccountDAO implements Dao<Account>{
     }
 
     @Override
-    public List<Account> getAll() {
-        return null;
+    public String getAll() {
+    	Connection con = ConnectionFactory.getConnection();
+ 		String sql = "SELECT * FROM accounts";
+ 		StringBuilder sb = new StringBuilder("==========Accounts==========");
+ 		sb.append("\n    ID          Balance       ");
+ 		///=====================Customers==========
+ 		try {
+ 			Statement stmt = con.createStatement();
+ 			ResultSet rs = stmt.executeQuery(sql);
+ 			
+ 			//System.out.println("==========Customers==========");
+ 			while(rs.next()) {
+ 				//invoke once since you start before the 1st and not on the 1st result
+ 				//first invoke advances to 1st element
+ 				sb.append("\nid: ["
+ 						+ rs.getInt("account_id")
+ 						+ "] balance: ["
+ 						+ rs.getString("balance")
+ 						+ "]");
+ 				
+ 			}
+ 			sb.append("\n==========Accounts==========");
+ 			
+ 		} catch (SQLException e) {
+ 			e.printStackTrace();
+ 		}
+ 		return sb.toString();
     }
     @Override
     public void save(Account account) {
@@ -56,6 +84,35 @@ public class AccountDAO implements Dao<Account>{
     @Override
     public void delete(Account account) {
 
+    }
+    
+    public String PrintAccounts() {
+ 		Connection con = ConnectionFactory.getConnection();
+ 		String sql = "SELECT * FROM accounts";
+ 		StringBuilder sb = new StringBuilder("==========Accounts==========");
+ 		sb.append("\n    ID          Balance       ");
+ 		///=====================Customers==========
+ 		try {
+ 			Statement stmt = con.createStatement();
+ 			ResultSet rs = stmt.executeQuery(sql);
+ 			
+ 			//System.out.println("==========Customers==========");
+ 			while(rs.next()) {
+ 				//invoke once since you start before the 1st and not on the 1st result
+ 				//first invoke advances to 1st element
+ 				sb.append("\nid: ["
+ 						+ rs.getInt("account_id")
+ 						+ "] balance: ["
+ 						+ rs.getString("balance")
+ 						+ "]");
+ 				
+ 			}
+ 			sb.append("\n==========Accounts==========");
+ 			
+ 		} catch (SQLException e) {
+ 			e.printStackTrace();
+ 		}
+ 		return sb.toString();
     }
 
 	
