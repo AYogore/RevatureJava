@@ -4,8 +4,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import DAO.AccountDAO;
 import DAO.CustomerDAO;
 import DAO.Dao;
+import Models.Account;
 import Models.Customer;
 import Utils.ConnectionFactory;
 import io.javalin.Javalin;
@@ -14,6 +16,7 @@ import io.javalin.Javalin;
 public class Driver {
 	
 	private static Dao<Customer> CustomerDAO;
+	private static Dao<Account> AccountDAO;
 
 	public static void main(String[] args) {
 		//SQL Database Connection
@@ -22,11 +25,7 @@ public class Driver {
 		//ConnectDatabase();
 		Connection con = ConnectionFactory.getConnection();
 		CustomerDAO = new CustomerDAO(con);
-		
-		
-		
-		
-		
+		AccountDAO = new AccountDAO(con);
 		
 		
 		//Postman commands
@@ -40,12 +39,14 @@ public class Driver {
 		app.get("/exception",ctx -> {
 			throw new Exception("test");
 			});
+		//GET ALL CLIENTS
 		app.get("/clients", clients -> {
 			clients.result(PrintCustomers());
 			//clients.result(CustomerDAO.)
 			
 			//String s = CustomerDAO.
 		});
+		//GET CLIENT OF ID
 		app.get("/clients/:id", clients -> {
 			try {
 				int id = Integer.parseInt(clients.pathParam("id"));
@@ -58,6 +59,8 @@ public class Driver {
 			}
 			//PrintCustomer(clients.pathParam("id"));
 		});
+		
+		//CREATE NEW CLIENT
 		app.post("/clients", clients -> {
 			//make new
 			clients.result("Made new client:" + clients.body());
@@ -69,6 +72,8 @@ public class Driver {
  			CustomerDAO.save(c);
 			
 		});
+		
+		//UPDATE CLIENT
 		app.put("/clients/:id", ctx -> {
 			//UPDATE
 			try {
@@ -87,6 +92,8 @@ public class Driver {
 			}
 		});
 		
+		//DELETE
+		//================================================
 		app.delete("/clients/:id", ctx -> {
 			try {
 				int id = Integer.parseInt(ctx.pathParam("id"));
@@ -95,6 +102,29 @@ public class Driver {
 				CustomerDAO.delete(c);
 				
 				ctx.result(c.GetName() + "has been deleted");
+			} catch (Exception e) {
+				ctx.status(404);
+				ctx.result("Client does not exist");
+				e.printStackTrace();
+			}
+		});
+		
+		//CREATE NEW ACCOUNT FOR CLIENT ID
+		app.post("/clients/:id/accounts", ctx ->{
+			try {
+				int id = Integer.parseInt(ctx.pathParam("id"));
+				Customer c = CustomerDAO.get(id);
+				
+				ctx.result("Made new ACCOUNT:" + ctx.body());
+				ctx.status(201);
+				
+				Account a = new Account(c.GetCustomerId());
+				System.out.println(c.GetName() + "has made a new account");
+				//CREATE ACCOUNT
+				AccountDAO.save(a);
+	 			//CustomerDAO.save(c);
+				
+				//ctx.result(c.GetName() + "has been deleted");
 			} catch (Exception e) {
 				ctx.status(404);
 				ctx.result("Client does not exist");
