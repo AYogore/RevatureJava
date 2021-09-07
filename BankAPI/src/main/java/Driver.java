@@ -86,7 +86,21 @@ public class Driver {
 				e.printStackTrace();
 			}
 		});
-			
+		
+		app.delete("/clients/:id", ctx -> {
+			try {
+				int id = Integer.parseInt(ctx.pathParam("id"));
+				Customer c = CustomerDAO.get(id);
+
+				CustomerDAO.delete(c);
+				
+				ctx.result(c.GetName() + "has been deleted");
+			} catch (Exception e) {
+				ctx.status(404);
+				ctx.result("Client does not exist");
+				e.printStackTrace();
+			}
+		});
 		
 		app.get("/runmethod", ctx -> {
 		RunMethod();

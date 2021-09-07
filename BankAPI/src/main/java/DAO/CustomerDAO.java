@@ -103,7 +103,6 @@ import Utils.ConnectionFactory;
 
      @Override
      public void update(Customer customer, String[] params) {
-    	 //customer.SetName(Objects.requireNonNull(params[0], "Name cannot be null"));
 		 try {
 			String sql = "UPDATE customers SET name = (?), address_id = (?) WHERE customer_id=(?)";
 			PreparedStatement pstmt = connection.prepareStatement(sql);
@@ -120,7 +119,21 @@ import Utils.ConnectionFactory;
 
      @Override
      public void delete(Customer customer) {
+		 try {
+			String sql = "DELETE FROM customers WHERE  customer_id=(?)";
+			PreparedStatement pstmt = connection.prepareStatement(sql);
+			
+			pstmt.setFloat(1, customer.GetCustomerId());
+			
+			pstmt.executeQuery();
+			System.out.println(customer.GetName() + "has been deleted");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println("deletion error");
+
+			e.printStackTrace();
+		}
     	 //delete line
-    	 customers.remove(customer);
+    	 //customers.remove(customer);
      }
  }
