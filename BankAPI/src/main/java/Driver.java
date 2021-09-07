@@ -190,6 +190,9 @@ public class Driver {
 				int aid = Integer.parseInt(ctx.pathParam("aid"));
 				Customer c = CustomerDAO.get(id);
 				System.out.println("Showing account " + aid + " of " + c.GetName());
+				Account a = new Account();
+				//a.SetAccountId(aid)
+
 				//Print Accounts
 				//ctx.result(AccountDAO.getAll());
 				//ctx.queryParams(key);
@@ -199,6 +202,30 @@ public class Driver {
 				e.printStackTrace();
 			}
 		}); 
+		
+		//DELETE ACCOUNT OF CLIENT ID
+		app.delete("/clients/:id/accounts/:aid", ctx ->{
+			try {
+				int id = Integer.parseInt(ctx.pathParam("id"));
+				int aid = Integer.parseInt(ctx.pathParam("aid"));
+				Customer c = CustomerDAO.get(id);
+				System.out.println("Deleting account " + aid + " of " + c.GetName());
+				Account a = new Account();
+				a.SetAccountId(aid);
+				a.SetCustomerId(id);
+				
+				AccountDAO.delete(a);
+
+				//Print Accounts
+				//ctx.result(AccountDAO.getAll());
+				//ctx.queryParams(key);
+			} catch (Exception e) {
+				ctx.status(404);
+				ctx.result("Client or Account does not exist");
+				e.printStackTrace();
+			}
+		});
+		
 		app.get("/runmethod", ctx -> {
 		RunMethod();
 		});

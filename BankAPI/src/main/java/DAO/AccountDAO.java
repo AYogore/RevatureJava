@@ -100,7 +100,21 @@ public class AccountDAO implements Dao<Account>{
 
     @Override
     public void delete(Account account) {
+    	try {
+			String sql = "DELETE FROM accounts WHERE customer_id= ? AND account_id=?";
+			PreparedStatement pstmt = connection.prepareStatement(sql);
+			
+			pstmt.setFloat(1, account.GetCustomerId());
+			pstmt.setFloat(2, account.GetAccountId());
+			
+			pstmt.executeQuery();
+			System.out.println("Account " + account.GetAccountId() + " has been deleted");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println("deletion error");
 
+			e.printStackTrace();
+		}
     }
     
     public String getAllWithParams(int top, int bottom) {

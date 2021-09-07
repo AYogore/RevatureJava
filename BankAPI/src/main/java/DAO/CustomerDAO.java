@@ -127,7 +127,5 @@ import Utils.ConnectionFactory;
 
 			e.printStackTrace();
 		}
-    	 //delete line
-    	 //customers.remove(customer);
      }
  }
