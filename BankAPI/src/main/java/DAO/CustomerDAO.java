@@ -114,7 +114,7 @@ import Utils.ConnectionFactory;
      @Override
      public void delete(Customer customer) {
 		 try {
-			String sql = "DELETE FROM customers WHERE  customer_id=(?)";
+			String sql = "DELETE FROM customers WHERE customer_id=(?)";
 			PreparedStatement pstmt = connection.prepareStatement(sql);
 			
 			pstmt.setFloat(1, customer.GetCustomerId());

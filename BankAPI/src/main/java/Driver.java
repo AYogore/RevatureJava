@@ -13,6 +13,7 @@ import Utils.ConnectionFactory;
 import io.javalin.Javalin;
 
 
+
 public class Driver {
 	
 	private static Dao<Customer> CustomerDAO;
@@ -116,7 +117,8 @@ public class Driver {
 				Customer c = CustomerDAO.get(id);
 				ctx.status(201);
 				
-				Account a = new Account(c.GetCustomerId());
+				Account a = new Account();
+				a.SetCustomerId(c.GetCustomerId());
 				System.out.println(c.GetName() + "has made a new account");
 				//CREATE ACCOUNT
 				AccountDAO.save(a);
@@ -126,21 +128,77 @@ public class Driver {
 				e.printStackTrace();
 			}
 		});
-		
+		//GET ACCOUNTS FOR CLIENT ID
 		app.get("/clients/:id/accounts", ctx ->{
 			try {
 				int id = Integer.parseInt(ctx.pathParam("id"));
 				Customer c = CustomerDAO.get(id);
+				//int top = 0;
+				//int bot = 0;
 				System.out.println("Showing all accounts of " + c.GetName());
 				//Print Accounts
-				ctx.result(AccountDAO.getAll());
+				//if(top == 0 && bot == 0)
+					ctx.result(AccountDAO.getAll());
+				//else
+				//	ctx.result(((DAO.AccountDAO) AccountDAO).getAllWithParams(top,bot));
 			} catch (Exception e) {
 				ctx.status(404);
 				ctx.result("Client does not exist");
 				e.printStackTrace();
 			}
 		});
+		//GET ALL ACCOUNTS FOR CLIENT ID WITH SEARCH PARAMS
+		/*
+		app.get("/clients/:id/accounts", ctx ->{
+			try {
+				int id = Integer.parseInt(ctx.queryParam("id"));
+				Customer c = CustomerDAO.get(id);
+				System.out.println("Showing accounts of " + c.GetName());
+				//Print Accounts
+				//ctx.result(AccountDAO.getAll());
+				//ctx.queryParams(key);
+			} catch (Exception e) {
+				ctx.status(404);
+				ctx.result("Client does not exist");
+				e.printStackTrace();
+			}
+		}); 
+		*/
+		//GET CERTAIN ACCOUNT FOR CLIENT ID
+		app.get("/clients/:id/accounts/:aid", ctx ->{
+			try {
+				int id = Integer.parseInt(ctx.pathParam("id"));
+				int aid = Integer.parseInt(ctx.pathParam("aid"));
+				Customer c = CustomerDAO.get(id);
+				System.out.println("Showing account " + aid + " of " + c.GetName());
+				//Print Accounts
+				Account a = AccountDAO.get(aid);
+				ctx.result("Showing account " + aid + " of " + c.GetName()
+				+ "\nBalance = " + a.GetAccountBalance());
+				//ctx.queryParams(key);
+			} catch (Exception e) {
+				ctx.status(404);
+				ctx.result("Client or Account does not exist");
+				e.printStackTrace();
+			}
+		}); 
 		
+		//UPDATE ACCOUNT OF CLIENT ID
+		app.put("/clients/:id/accounts/:aid", ctx ->{
+			try {
+				int id = Integer.parseInt(ctx.pathParam("id"));
+				int aid = Integer.parseInt(ctx.pathParam("aid"));
+				Customer c = CustomerDAO.get(id);
+				System.out.println("Showing account " + aid + " of " + c.GetName());
+				//Print Accounts
+				//ctx.result(AccountDAO.getAll());
+				//ctx.queryParams(key);
+			} catch (Exception e) {
+				ctx.status(404);
+				ctx.result("Client or Account does not exist");
+				e.printStackTrace();
+			}
+		}); 
 		app.get("/runmethod", ctx -> {
 		RunMethod();
 		});

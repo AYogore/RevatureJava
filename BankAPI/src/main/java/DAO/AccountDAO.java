@@ -25,7 +25,24 @@ public class AccountDAO implements Dao<Account>{
 
     @Override
     public Account get(int id) {
-        return null;
+    	try {
+   		 String sql = "SELECT balance FROM accounts WHERE customer_id="+id;
+   		 Account a = new Account();
+   		 a.SetAccountId(id);
+   		 Statement st = connection.createStatement();
+   		 ResultSet rs = st.executeQuery(sql);
+   		 
+   		 rs.next();
+   		 float balance = rs.getFloat(1);
+   		 a.SetAccountBalance(balance);
+   		 return a;
+   		 
+   		 
+		} catch (Exception e) {
+			//con.status(404);
+			e.printStackTrace();
+		}
+   	return null;
     }
 
     @Override
@@ -86,15 +103,16 @@ public class AccountDAO implements Dao<Account>{
 
     }
     
-    public String PrintAccounts() {
- 		Connection con = ConnectionFactory.getConnection();
- 		String sql = "SELECT * FROM accounts";
+    public String getAllWithParams(int top, int bottom) {
+ 		String sql = "SELECT * FROM accounts WHERE amountLessThan=? AND amountGreaterThan=?";
  		StringBuilder sb = new StringBuilder("==========Accounts==========");
  		sb.append("\n    ID          Balance       ");
  		///=====================Customers==========
  		try {
- 			Statement stmt = con.createStatement();
- 			ResultSet rs = stmt.executeQuery(sql);
+ 			PreparedStatement pstmt = connection.prepareStatement(sql);
+ 			pstmt.setInt(1, top);
+ 			pstmt.setInt(2, bottom);
+ 			ResultSet rs = pstmt.executeQuery(sql);
  			
  			//System.out.println("==========Customers==========");
  			while(rs.next()) {
