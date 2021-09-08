@@ -244,7 +244,7 @@ public class Driver {
 				a = AccountDAO.get(aid);
 				arr[0] = "withdraw";
 				AccountDAO.update(a, arr);
-				
+				//transfer
 				a = AccountDAO.get(raid);
 				arr[0] = "deposit";
 				AccountDAO.update(a, arr);
