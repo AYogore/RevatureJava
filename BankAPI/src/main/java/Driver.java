@@ -128,7 +128,7 @@ public class Driver {
 				e.printStackTrace();
 			}
 		});
-		//GET ACCOUNTS FOR CLIENT ID
+		//GET ACCOUNTS FOR CLIENT ID :: USE VARARGS WHERE ARRSIZE 0 RUNS DEFAULT, 1,2 RUNS TOP BOT SORT
 		app.get("/clients/:id/accounts", ctx ->{
 			try {
 				int id = Integer.parseInt(ctx.pathParam("id"));
@@ -189,13 +189,14 @@ public class Driver {
 				int id = Integer.parseInt(ctx.pathParam("id"));
 				int aid = Integer.parseInt(ctx.pathParam("aid"));
 				Customer c = CustomerDAO.get(id);
-				System.out.println("Showing account " + aid + " of " + c.GetName());
-				Account a = new Account();
-				//a.SetAccountId(aid)
-
-				//Print Accounts
-				//ctx.result(AccountDAO.getAll());
-				//ctx.queryParams(key);
+				System.out.println("Update account " + aid + " of " + c.GetName());
+				Account a = AccountDAO.get(aid);
+				System.out.println(a.GetAccountBalance());
+				//a.SetAccountBalance();
+				String[] arr = ctx.body().split(":");
+				System.out.println("type in body number to update balance");
+				AccountDAO.update(a, arr);
+				
 			} catch (Exception e) {
 				ctx.status(404);
 				ctx.result("Client or Account does not exist");
@@ -226,8 +227,34 @@ public class Driver {
 			}
 		});
 		
-		app.get("/runmethod", ctx -> {
-		RunMethod();
+		//TRANSFER
+		app.patch("/clients/:id/accounts/:aid/transfer/:raid", ctx -> {
+			try {
+				int id = Integer.parseInt(ctx.pathParam("id"));
+				int aid = Integer.parseInt(ctx.pathParam("aid"));
+				int raid = Integer.parseInt(ctx.pathParam("raid"));
+				Customer c = CustomerDAO.get(id);
+				Account a = new Account();
+				a.SetAccountId(aid);
+				a.SetCustomerId(id);
+				System.out.println("Transfer funds from account " + aid + " to account " + raid +" of " + c.GetName());
+				String[] arr = ctx.body().split(":");
+				System.out.println("type in body number to update balance");
+				
+				a = AccountDAO.get(aid);
+				arr[0] = "withdraw";
+				AccountDAO.update(a, arr);
+				
+				a = AccountDAO.get(raid);
+				arr[0] = "deposit";
+				AccountDAO.update(a, arr);
+				
+				
+			} catch (Exception e) {
+				ctx.status(404);
+				ctx.result("Client or Account does not exist");
+				e.printStackTrace();
+			}
 		});
 		
 			

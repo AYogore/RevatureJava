@@ -26,7 +26,7 @@ public class AccountDAO implements Dao<Account>{
     @Override
     public Account get(int id) {
     	try {
-   		 String sql = "SELECT balance FROM accounts WHERE customer_id="+id;
+   		 String sql = "SELECT balance FROM accounts WHERE account_id="+id;
    		 Account a = new Account();
    		 a.SetAccountId(id);
    		 Statement st = connection.createStatement();
@@ -45,7 +45,8 @@ public class AccountDAO implements Dao<Account>{
    	return null;
     }
 
-    @Override
+    
+	@Override
     public String getAll() {
     	Connection con = ConnectionFactory.getConnection();
  		String sql = "SELECT * FROM accounts";
@@ -79,11 +80,10 @@ public class AccountDAO implements Dao<Account>{
 		 noOfAccounts++;
 
 		 try {
-			String sql = "INSERT INTO accounts (customer_id, account_id, balance) VALUES (?,?,?);";
+			String sql = "INSERT INTO accounts (customer_id, balance) VALUES (?,?);";
 			PreparedStatement pstmt = connection.prepareStatement(sql);
 			pstmt.setFloat(1, account.GetCustomerId());
-			pstmt.setInt(2, noOfAccounts);
-			pstmt.setDouble(3, 0);
+			pstmt.setDouble(2, 0);
 			//System.out.println("account created for: " + c.GetName());
 			//
  			pstmt.executeQuery();
@@ -95,8 +95,67 @@ public class AccountDAO implements Dao<Account>{
 
     @Override
     public void update(Account account, String[] params) {
+    	try {
+			String sql = "UPDATE accounts SET balance=? WHERE account_id=?";
+					 // AND account_id=?";
+			System.out.println(params[0]);
+			System.out.println(params[1]);
 
+			PreparedStatement pstmt = connection.prepareStatement(sql);
+		
+			double d = account.GetAccountBalance();
+			System.out.println(d);
+			double a = Double.valueOf(params[1]);
+			switch(params[0])
+			{
+			case "withdraw": //add
+				d -= a;
+				System.out.println(d);
+				break;
+			case "deposit":
+				d += a;
+				System.out.println(d);
+
+				break;
+			}
+			pstmt.setDouble(1, d); 
+			
+			pstmt.setFloat(2, account.GetAccountId());
+			//pstmt.setFloat(3, account.GetAccountId());
+			
+			pstmt.executeQuery();
+
+   		 	System.out.println("executed");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+     }
+    
+    /*public void transfer(Account a, Account b, int amt)
+    {
+    	try {
+    		String sql = "UPDATE accounts SET balance= SUM(? + ?) FROM accounts WHERE customer_id=(?) AND account_id=?";
+			PreparedStatement pstmt = connection.prepareStatement(sql);pstmt.setFloat(1, a.GetAccountId()); 
+			pstmt.setFloat(2, amt);
+   		 	pstmt.setFloat(3, a.GetCustomerId());
+   		 	pstmt.setFloat(4, a.GetAccountId());
+   		 	
+   		 	pstmt.executeQuery();
+   		 	
+   		 String sql = "SELECT balance SUM(? - ?) FROM accounts WHERE customer_id=(?) AND account_id=?";
+			PreparedStatement pstmt = connection.prepareStatement(sql);pstmt.setFloat(1, a.GetAccountId()); 
+			pstmt.setFloat(2, amt);
+		 	pstmt.setFloat(3, a.GetCustomerId());
+		 	pstmt.setFloat(4, a.GetAccountId());
+		 	
+		 	pstmt.executeQuery();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
+    */
 
     @Override
     public void delete(Account account) {
