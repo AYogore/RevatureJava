@@ -15,12 +15,10 @@ import Utils.ConnectionFactory;
 public class AccountDAO implements Dao<Account>{
     private List<Account> accounts;
     Connection connection;
-    private int noOfAccounts;
 
     public AccountDAO(Connection conn) {
         accounts = new LinkedList<>();
         connection = conn;
-        noOfAccounts = 0;
     }
 
     @Override
@@ -77,7 +75,6 @@ public class AccountDAO implements Dao<Account>{
     }
     @Override
     public void save(Account account) {
-		 noOfAccounts++;
 
 		 try {
 			String sql = "INSERT INTO accounts (customer_id, balance) VALUES (?,?);";
@@ -104,6 +101,7 @@ public class AccountDAO implements Dao<Account>{
 			PreparedStatement pstmt = connection.prepareStatement(sql);
 		
 			double d = account.GetAccountBalance();
+			//double startingBalance = d;
 			System.out.println(d);
 			double a = Double.valueOf(params[1]);
 			switch(params[0])
@@ -119,10 +117,7 @@ public class AccountDAO implements Dao<Account>{
 				break;
 			}
 			pstmt.setDouble(1, d); 
-			
 			pstmt.setFloat(2, account.GetAccountId());
-			//pstmt.setFloat(3, account.GetAccountId());
-			
 			pstmt.executeQuery();
 
    		 	System.out.println("executed");
@@ -205,6 +200,61 @@ public class AccountDAO implements Dao<Account>{
  		}
  		return sb.toString();
     }
+
+	@Override
+	public String getAll(int... i) {
+		StringBuilder sb = new StringBuilder("==========Accounts==========");
+		sb.append("\n    ID          Balance       ");
+		//if(i.length == 3)
+		//{
+			String sql = "SELECT * FROM accounts WHERE customer_id=(?) AND balance BETWEEN ? and ?";
+			///=====================Customers==========customer_id=(?) AND
+			try {
+				PreparedStatement pstmt = connection.prepareStatement(sql);
+				pstmt.setInt(1, i[0]);
+				pstmt.setInt(2, i[1]);
+				pstmt.setInt(3, i[2]);
+				ResultSet rs = pstmt.executeQuery();
+				while(rs.next()) {
+					//invoke once since you start before the 1st and not on the 1st result
+					//first invoke advances to 1st element
+					sb.append("\nid: ["
+							+ rs.getInt("account_id")
+							+ "] balance: ["
+							+ rs.getString("balance")
+							+ "]");
+				}
+				sb.append("\n==========Accounts==========");
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		//}
+		//else
+		/*{
+			String sql = "SELECT * FROM accounts WHERE customer_id=(?)";
+			///=====================Customers==========
+			try {
+				PreparedStatement pstmt = connection.prepareStatement(sql);
+				pstmt.setInt(1, i[0]);
+				ResultSet rs = pstmt.executeQuery();
+				while(rs.next()) {
+					//invoke once since you start before the 1st and not on the 1st result
+					//first invoke advances to 1st element
+					sb.append("\nid: ["
+							+ rs.getInt("account_id")
+							+ "] balance: ["
+							+ rs.getString("balance")
+							+ "]");
+				}
+				sb.append("\n==========Accounts==========");
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}*/
+ 		return sb.toString();
+	}
 
 	
 }

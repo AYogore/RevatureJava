@@ -9,6 +9,8 @@ public interface Dao<T> {
 	
 	String getAll();
 	
+	String getAll(int...i);
+	
 	void save(T t) throws SQLException;
 	
 	void update(T t, String[] params);

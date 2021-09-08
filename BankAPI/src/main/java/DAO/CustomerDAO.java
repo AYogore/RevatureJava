@@ -128,4 +128,10 @@ import Utils.ConnectionFactory;
 			e.printStackTrace();
 		}
      }
+
+	@Override
+	public String getAll(int... i) {
+		// TODO Auto-generated method stub
+		return null;
+	}
  }

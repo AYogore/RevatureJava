@@ -133,12 +133,13 @@ public class Driver {
 			try {
 				int id = Integer.parseInt(ctx.pathParam("id"));
 				Customer c = CustomerDAO.get(id);
-				//int top = 0;
-				//int bot = 0;
+				int top = Integer.parseInt(ctx.queryParam("amountLessThan", "999999"));
+				int bot = Integer.parseInt(ctx.queryParam("amountGreaterThan", "0"));
 				System.out.println("Showing all accounts of " + c.GetName());
+				
 				//Print Accounts
 				//if(top == 0 && bot == 0)
-					ctx.result(AccountDAO.getAll());
+					ctx.result(AccountDAO.getAll(id, bot, top));
 				//else
 				//	ctx.result(((DAO.AccountDAO) AccountDAO).getAllWithParams(top,bot));
 			} catch (Exception e) {
@@ -147,23 +148,7 @@ public class Driver {
 				e.printStackTrace();
 			}
 		});
-		//GET ALL ACCOUNTS FOR CLIENT ID WITH SEARCH PARAMS
-		/*
-		app.get("/clients/:id/accounts", ctx ->{
-			try {
-				int id = Integer.parseInt(ctx.queryParam("id"));
-				Customer c = CustomerDAO.get(id);
-				System.out.println("Showing accounts of " + c.GetName());
-				//Print Accounts
-				//ctx.result(AccountDAO.getAll());
-				//ctx.queryParams(key);
-			} catch (Exception e) {
-				ctx.status(404);
-				ctx.result("Client does not exist");
-				e.printStackTrace();
-			}
-		}); 
-		*/
+		
 		//GET CERTAIN ACCOUNT FOR CLIENT ID
 		app.get("/clients/:id/accounts/:aid", ctx ->{
 			try {
@@ -244,7 +229,7 @@ public class Driver {
 				a = AccountDAO.get(aid);
 				arr[0] = "withdraw";
 				AccountDAO.update(a, arr);
-				//transfer
+				//transfer hb
 				a = AccountDAO.get(raid);
 				arr[0] = "deposit";
 				AccountDAO.update(a, arr);
