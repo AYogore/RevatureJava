@@ -205,8 +205,7 @@ public class AccountDAO implements Dao<Account>{
 	public String getAll(int... i) {
 		StringBuilder sb = new StringBuilder("==========Accounts==========");
 		sb.append("\n    ID          Balance       ");
-		//if(i.length == 3)
-		//{
+		
 			String sql = "SELECT * FROM accounts WHERE customer_id=(?) AND balance BETWEEN ? and ?";
 			///=====================Customers==========customer_id=(?) AND
 			try {
@@ -229,30 +228,7 @@ public class AccountDAO implements Dao<Account>{
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		//}
-		//else
-		/*{
-			String sql = "SELECT * FROM accounts WHERE customer_id=(?)";
-			///=====================Customers==========
-			try {
-				PreparedStatement pstmt = connection.prepareStatement(sql);
-				pstmt.setInt(1, i[0]);
-				ResultSet rs = pstmt.executeQuery();
-				while(rs.next()) {
-					//invoke once since you start before the 1st and not on the 1st result
-					//first invoke advances to 1st element
-					sb.append("\nid: ["
-							+ rs.getInt("account_id")
-							+ "] balance: ["
-							+ rs.getString("balance")
-							+ "]");
-				}
-				sb.append("\n==========Accounts==========");
-				
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}*/
+		
  		return sb.toString();
 	}
 

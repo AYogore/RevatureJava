@@ -13,7 +13,6 @@ import Utils.ConnectionFactory;
 import io.javalin.Javalin;
 
 
-
 public class Driver {
 	
 	private static Dao<Customer> CustomerDAO;
