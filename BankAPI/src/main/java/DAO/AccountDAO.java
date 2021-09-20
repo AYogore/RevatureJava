@@ -96,7 +96,7 @@ public class AccountDAO implements Dao<Account>{
 			String sql = "UPDATE accounts SET balance=? WHERE account_id=?";
 					 // AND account_id=?";
 			System.out.println(params[0]);
-			System.out.println(params[1]);
+			System.out.println(account.GetAccountId());
 
 			PreparedStatement pstmt = connection.prepareStatement(sql);
 		
