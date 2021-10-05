@@ -2,7 +2,7 @@
 
 ## Project Description
 
-Here goes your awesome project description!
+Reimbursement API where employee input is stored in a database which can be approved or denied by managers
 
 ## Technologies Used
 
